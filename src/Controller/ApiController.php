@@ -9,9 +9,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 class ApiController extends AbstractController
 {
+    /**
+     * @OA\Parameter(
+     *     name="image",
+     *      in="query",
+     *      description="Attach upload file",
+     *      @OA\Schema(type="string"))
+     *  @Security(name="Bearer")
+      */
     #[Route('/api/upload', name: 'app_api_upload', methods: ['POST'])]
     public function index(Request $request, ImagesService $service): Response
     {

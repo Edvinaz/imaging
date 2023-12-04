@@ -14,18 +14,19 @@
         "knplabs/gaufrette": "^0.11.1",
         "lexik/jwt-authentication-bundle": "^2.20",
         "liip/imagine-bundle": "^2.12",
-        "symfony/asset": "7.0.*",
-        "symfony/console": "7.0.*",
-        "symfony/dotenv": "7.0.*",
+        "nelmio/api-doc-bundle": "^4.12",
+        "symfony/asset": "6.4.*",
+        "symfony/console": "6.4.*",
+        "symfony/dotenv": "6.4.*",
         "symfony/flex": "^2.4",
-        "symfony/form": "7.0.*",
-        "symfony/framework-bundle": "7.0.*",
-        "symfony/mime": "7.0.*",
-        "symfony/runtime": "7.0.*",
-        "symfony/security-bundle": "7.0.*",
-        "symfony/twig-bundle": "7.0.*",
-        "symfony/validator": "7.0.*",
-        "symfony/yaml": "7.0.*",
+        "symfony/form": "6.4.*",
+        "symfony/framework-bundle": "6.4.*",
+        "symfony/mime": "6.4.*",
+        "symfony/runtime": "6.4.*",
+        "symfony/security-bundle": "6.4.*",
+        "symfony/twig-bundle": "6.4.*",
+        "symfony/validator": "6.4.*",
+        "symfony/yaml": "6.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -78,7 +79,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.0.*"
+            "require": "6.4.*"
         }
     }
 }
