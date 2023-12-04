@@ -8,4 +8,6 @@
 /public/bundles/
 /var/
 /vendor/
+.bash_history
+/public
 ###< symfony/framework-bundle ###
