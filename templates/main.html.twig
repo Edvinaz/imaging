@@ -1,5 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <p>Labas</p>
-{% endblock %}
+
+<div class="container">
+    {% for image in images %}
+
+        <div class="row">
+
+        <div class="col-md-3">
+            <img src="{{ asset('images/' ~ image.path)|imagine_filter('squared_thumbnail_small') }}" alt="{{ image.user.email }}"
+                 class="img-responsive">
+            <p>{{ image.user.email }}</p>
+        </div>
+        {% if (loop.index + 1) % 4 == 0 or loop.last %}
+            </div>
+            <div class="row">
+        {% endif %}
+    {% endfor %}
+    </div>
+    {% endblock %}

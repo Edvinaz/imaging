@@ -10,11 +10,18 @@ class ImagesService
 {
     public function __construct(
         private TokenStorageInterface  $tokenStorage,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
-    public function uploadImage(array $data, string $uploadDirectory)
+    public function getImages(): array
+    {
+        $list = $this->entityManager->getRepository(Image::class)->findAll();
+
+        return $list;
+    }
+
+    public function uploadImage(array $data, string $uploadDirectory): void
     {
         $token = $this->tokenStorage->getToken();
 
@@ -25,14 +32,10 @@ class ImagesService
         $image = new Image();
         $image->setUser($user);
         $image->setPath($newFileName);
-        
+
+        $uploadedFile->move($uploadDirectory, $newFileName);
+
         $this->entityManager->persist($image);
         $this->entityManager->flush();
-
-        $uploadedFile->move(
-            $uploadDirectory,
-            $newFileName
-        );
     }
-
 }
