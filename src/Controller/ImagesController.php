@@ -14,10 +14,15 @@ class ImagesController extends AbstractController
     #[Route('/', name: 'app_main')]
     public function index(Request $request, ImagesService $service): Response
     {
-        $images = $service->getImages();
+        $page = $request->get('page', 0);
+        $limit = $request->get('limit', 16);
+        $images = $service->getImages($limit, $page);
+
         return $this->render('main.html.twig', [
             'user' => $this->getUser(),
             'images' => $images,
+            'page' => $page,
+            'limit' => $limit,
         ]);
     }
 
@@ -28,7 +33,7 @@ class ImagesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $service->uploadImage($form->getData(), $this->getParameter('upload_directory'));
+            $service->uploadImage($form->getData()['image'], $this->getParameter('upload_directory'));
         }
 
         return $this->render('images/upload.html.twig', [

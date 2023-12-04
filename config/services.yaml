@@ -27,3 +27,7 @@ services:
         arguments:
             $tokenStorage: '@security.token_storage'
 
+    App\Service\FileService:
+        arguments:
+            $uploadDirectory: '%upload_directory%'
+

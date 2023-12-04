@@ -7,14 +7,35 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validation;
 
 class ApiController extends AbstractController
 {
     #[Route('/api/upload', name: 'app_api_upload', methods: ['POST'])]
     public function index(Request $request, ImagesService $service): Response
     {
-        $service->uploadImage($request->files->all(), $this->getParameter('upload_directory'));
+        $validator = Validation::createValidator();
+        $constraints = [
+            new Assert\File([
+                'maxSize' => '5M',
+                'mimeTypes' => ['image/jpeg', 'image/png'],
+                'mimeTypesMessage' => 'Please upload a valid JPG or PNG image.',
+            ]),
+        ];
+        $file = $request->files->get('image');
+        $errors = $validator->validate($file, $constraints);
 
-        return $this->json(['OK']);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+
+            return $this->json(['error' => $errorMessages], 400);
+        }
+        $file = $service->uploadImage($request->files->get('image'), $this->getParameter('upload_directory'));
+
+        return $this->json(['OK' => $file]);
     }
 }

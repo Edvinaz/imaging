@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ImagesService
@@ -11,31 +12,34 @@ class ImagesService
     public function __construct(
         private TokenStorageInterface  $tokenStorage,
         private EntityManagerInterface $entityManager,
+        private FileService $fileService
     ) {
     }
 
-    public function getImages(): array
+    public function getImages(int $limit = 16, int $page = 0): array
     {
-        $list = $this->entityManager->getRepository(Image::class)->findAll();
+        $list = $this->entityManager->getRepository(Image::class)->getPaginatedImages($page, $limit);
 
         return $list;
     }
 
-    public function uploadImage(array $data, string $uploadDirectory): void
+    public function uploadImage(UploadedFile $uploadedFile, string $uploadDirectory)
     {
         $token = $this->tokenStorage->getToken();
 
         $user = $token->getUser();
-        $uploadedFile = $data['image'];
+
         $newFileName = md5(uniqid()) . '.' . $uploadedFile->guessExtension();
 
         $image = new Image();
         $image->setUser($user);
         $image->setPath($newFileName);
 
-        $uploadedFile->move($uploadDirectory, $newFileName);
+        $this->fileService->saveUploadedImage($uploadedFile, $newFileName);
 
         $this->entityManager->persist($image);
         $this->entityManager->flush();
+
+        return $newFileName;
     }
 }
