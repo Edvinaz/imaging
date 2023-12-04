@@ -11,12 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImagesController extends AbstractController
 {
-    #[Route('/images', name: 'app_images')]
-    public function index(): Response
+    #[Route('/', name: 'app_main')]
+    public function index(Request $request, ImagesService $service): Response
     {
-        dd($this->getUser());
-        return $this->render('images/index.html.twig', [
-            'controller_name' => 'ImagesController',
+        $images = $service->getImages();
+        return $this->render('main.html.twig', [
+            'user' => $this->getUser(),
+            'images' => $images,
         ]);
     }
 
@@ -27,13 +28,11 @@ class ImagesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            $user = $this->getUser();
-//            dump('test');
-//            dd($user);
             $service->uploadImage($form->getData(), $this->getParameter('upload_directory'));
         }
 
         return $this->render('images/upload.html.twig', [
+            'user' => $this->getUser(),
             'form' => $form->createView(),
         ]);
     }
