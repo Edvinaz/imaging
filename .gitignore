@@ -9,7 +9,7 @@
 /var/
 /vendor/
 .bash_history
-/public
+
 ###< symfony/framework-bundle ###
 
 ###> liip/imagine-bundle ###
@@ -25,3 +25,5 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+.docker/db/storage
