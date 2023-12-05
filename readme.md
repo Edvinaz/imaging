@@ -5,6 +5,10 @@
 ```bash
 docker-compose up -d
 ```
+Create .env from .env.dis:
+```bash
+cp .env.dist .env
+```
 Install dependencies:
 ```bash
 docker exec imaging composer install
