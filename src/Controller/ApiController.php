@@ -17,9 +17,10 @@ class ApiController extends AbstractController
     /**
      * @OA\Parameter(
      *     name="image",
-     *      in="query",
-     *      description="Attach upload file",
-     *      @OA\Schema(type="string"))
+     *     in="query",
+     *     description="Attach upload file",
+     *     required=true
+     *     )
      *  @Security(name="Bearer")
       */
     #[Route('/api/upload', name: 'app_api_upload', methods: ['POST'])]
@@ -44,8 +45,8 @@ class ApiController extends AbstractController
 
             return $this->json(['error' => $errorMessages], 400);
         }
-        $file = $service->uploadImage($request->files->get('image'), $this->getParameter('upload_directory'));
+        $uploadedImage = $service->uploadImage($request->files->get('image'));
 
-        return $this->json(['OK' => $file]);
+        return $this->json(['image_uploaded' => $uploadedImage->getPath()]);
     }
 }

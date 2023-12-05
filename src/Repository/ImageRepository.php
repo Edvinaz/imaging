@@ -33,4 +33,12 @@ class ImageRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function getImageCount()
+    {
+        return $this->createQueryBuilder('i')
+            ->select('COUNT(i.id)')
+            ->getQuery()
+            ->getSingleResult();
+    }
 }

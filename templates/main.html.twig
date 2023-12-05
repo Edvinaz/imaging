@@ -1,23 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
+    {% set lastPage = (count / limit)|round(0, 'ceil') %}
 <div class="container">
     <div class="row">
     {% for image in images %}
        <div class="col-md-3">
             <img src="{{ asset('images/' ~ image.path)|imagine_filter('squared_thumbnail_small') }}" alt="{{ image.user.username }}"
                  class="img-responsive">
-            <p>{{ image.user.email }}</p>
+            <p>{{ image.user.username }}</p>
         </div>
     {% endfor %}
     </div>
     <div>
-        <a href="{{ url('app_main', {'page' : 0, 'limit': limit}) }}">First</a>
-        {% if (page > 0) %}
-            <a href="{{ url('app_main', {'page' : 0, 'limit': limit}) }}">Previous</a>
+        {% if (count > limit and page > 0) %}
+            <a href="{{ url('app_main', {'page' : 0, 'limit': limit}) }}">First page</a>&nbsp;
         {% endif %}
-        <a href="{{ url('app_main', {'page' : page + 1, 'limit': limit}) }}">Next</a>
+        {% if (page > 0 and lastPage - 1 == 0) %}
+            <a href="{{ url('app_main', {'page' : 0, 'limit': limit}) }}">Previous page</a>&nbsp;
+        {% endif %}
+
+        {% if (page + 1 < lastPage - 1) %}
+            <a href="{{ url('app_main', {'page' : page + 1, 'limit': limit}) }}">Next page</a>&nbsp;
+        {% endif %}
+
+        {% if (page < lastPage - 1) %}
+            <a href="{{ url('app_main', {'page' : lastPage - 1, 'limit': limit}) }}">Last page</a>&nbsp;
+        {% endif %}
     </div>
 </div>
 {% endblock %}

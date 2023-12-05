@@ -15,14 +15,16 @@ class ImagesController extends AbstractController
     public function index(Request $request, ImagesService $service): Response
     {
         $page = $request->get('page', 0);
-        $limit = $request->get('limit', 16);
+        $limit = $request->get('limit', 12);
         $images = $service->getImages($limit, $page);
+        $count = $service->getImagesCount()[1];
 
         return $this->render('main.html.twig', [
             'user' => $this->getUser(),
             'images' => $images,
             'page' => $page,
             'limit' => $limit,
+            'count' => $count,
         ]);
     }
 
@@ -33,7 +35,7 @@ class ImagesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $service->uploadImage($form->getData()['image'], $this->getParameter('upload_directory'));
+            $service->uploadImage($form->getData()['image']);
         }
 
         return $this->render('images/upload.html.twig', [
