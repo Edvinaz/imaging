@@ -5,6 +5,6 @@ WORKDIR /var/www/html
 RUN apt-get update
 RUN apt-get -y install less vim git iputils-ping zip libzip-dev libpng-dev libxml2-dev mariadb-client
 
-RUN docker-php-ext-install zip gd bcmath exif gd intl opcache pcntl mysqli pdo_mysql
+RUN docker-php-ext-install zip gd bcmath exif intl opcache pcntl mysqli pdo_mysql
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
