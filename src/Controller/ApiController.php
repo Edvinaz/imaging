@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
+use App\Request\ImageRequest;
 use App\Service\ImagesService;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validation;
-use OpenApi\Annotations as OA;
-use Nelmio\ApiDocBundle\Annotation\Security;
 
 class ApiController extends AbstractController
 {
@@ -24,28 +22,11 @@ class ApiController extends AbstractController
      *  @Security(name="Bearer")
       */
     #[Route('/api/upload', name: 'app_api_upload', methods: ['POST'])]
-    public function index(Request $request, ImagesService $service): Response
+    public function index(ImageRequest $request, ImagesService $service): Response
     {
-        $validator = Validation::createValidator();
-        $constraints = [
-            new Assert\File([
-                'maxSize' => '5M',
-                'mimeTypes' => ['image/jpeg', 'image/png'],
-                'mimeTypesMessage' => 'Please upload a valid JPG or PNG image.',
-            ]),
-        ];
-        $file = $request->files->get('image');
-        $errors = $validator->validate($file, $constraints);
+        $file = $request->getRequest()->files->get('image');
 
-        if (count($errors) > 0) {
-            $errorMessages = [];
-            foreach ($errors as $error) {
-                $errorMessages[] = $error->getMessage();
-            }
-
-            return $this->json(['error' => $errorMessages], 400);
-        }
-        $uploadedImage = $service->uploadImage($request->files->get('image'));
+        $uploadedImage = $service->uploadImage($file);
 
         return $this->json(['image_uploaded' => $uploadedImage->getPath()]);
     }
